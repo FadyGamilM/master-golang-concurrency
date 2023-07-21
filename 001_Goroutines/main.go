@@ -8,7 +8,7 @@ import (
 func DoTask(s string, wg *sync.WaitGroup) {
 	fmt.Println("Task ", s, " is finished!")
 	// decrement the number of waited tasks that the waitgroup is waiting for
-	wg.Done()
+	defer wg.Done()
 }
 func main() {
 	tasks := []string{"task1", "task2", "task3", "task4", "task5", "task6"}
