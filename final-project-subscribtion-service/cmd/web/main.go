@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -39,7 +40,7 @@ func main() {
 	error_logger := log.New(os.Stdout, "ERROR ➜ \t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	//! 6. setup the app config and initialize it
-	app_config := Config{
+	app := Config{
 		DB:      db,
 		Session: session,
 		InfoLog: info_logger,
@@ -50,7 +51,22 @@ func main() {
 	//! 7.setup the email
 
 	//! 8. Listen for requests
+	app.serve()
 
+}
+
+// starts a http server
+func (app *Config) serve() {
+	server := &http.Server{
+		Addr:    fmt.Sprintf(":%s", Port),
+		Handler: app.routes(),
+	}
+	app.InfoLog.Println("starting the server on port ", Port)
+	err := server.ListenAndServe()
+	if err != nil {
+		app.ErrLog.Println("error while starting the server on port ", Port, " : ", err)
+		app.ErrLog.Panic(err)
+	}
 }
 
 // initialize the database and return the pool of connection
