@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -50,33 +49,12 @@ func main() {
 
 	//! 7.setup the email
 
-	//! 8. Listen for requests
-	app.serve()
+	//! 8. running a go routine in the background to handle the shutdown for any termination or interrupt to get gracefull shutdown
+	go app.ListenForShutdown()
 
-}
+	//! 9. Listen for requests
+	app.Serve()
 
-// starts a http server
-func (app *Config) serve() {
-	server := &http.Server{
-		Addr:    fmt.Sprintf(":%s", Port),
-		Handler: app.routes(),
-	}
-	app.InfoLog.Println("starting the server on port ", Port)
-	err := server.ListenAndServe()
-	if err != nil {
-		app.ErrLog.Println("error while starting the server on port ", Port, " : ", err)
-		app.ErrLog.Panic(err)
-	}
-}
-
-// initialize the database and return the pool of connection
-func init_db() *sql.DB {
-	conn := connect_to_db()
-	if conn == nil {
-		log.Fatalln("Cannot connect to the database!")
-	}
-
-	return conn
 }
 
 // the connection logic to postgres db and returns the pool of connection
