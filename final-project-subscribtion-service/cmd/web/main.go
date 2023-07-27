@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/gob"
 	"log"
 	"net/http"
 	"os"
@@ -126,6 +127,9 @@ func ping_db(db *sql.DB) error {
 }
 
 func init_session() *scs.SessionManager {
+	// register data types into the session
+	gob.Register(data.User{})
+
 	// setup the session
 	session := scs.New()
 	session.Store = redisstore.New(init_redis())
