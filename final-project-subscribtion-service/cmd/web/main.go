@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/FadyGamilM/subscriptionservice/data"
 	"github.com/alexedwards/scs/redisstore"
 	"github.com/alexedwards/scs/v2"
 	"github.com/gomodule/redigo/redis"
@@ -45,6 +46,7 @@ func main() {
 		InfoLog: info_logger,
 		ErrLog:  error_logger,
 		wait:    &wg,
+		models:  data.New(db),
 	}
 
 	//! 7.setup the email

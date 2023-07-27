@@ -10,6 +10,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/FadyGamilM/subscriptionservice/data"
 	"github.com/alexedwards/scs/v2"
 )
 
@@ -20,6 +21,7 @@ type Config struct {
 	InfoLog *log.Logger
 	ErrLog  *log.Logger
 	wait    *sync.WaitGroup
+	models  data.Models
 }
 
 func (app *Config) is_authenticated(r *http.Request) bool {
