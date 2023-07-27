@@ -45,16 +45,6 @@ func (app *Config) Serve() {
 	}
 }
 
-// initialize the database and return the pool of connection
-func init_db() *sql.DB {
-	conn := connect_to_db()
-	if conn == nil {
-		log.Fatalln("Cannot connect to the database!")
-	}
-
-	return conn
-}
-
 // gracefull shutdown implementation
 // this is running on the background and lsiten for something
 func (app *Config) ListenForShutdown() {

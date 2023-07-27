@@ -57,6 +57,16 @@ func main() {
 
 }
 
+// initialize the database and return the pool of connection
+func init_db() *sql.DB {
+	conn := connect_to_db()
+	if conn == nil {
+		log.Fatalln("Cannot connect to the database!")
+	}
+
+	return conn
+}
+
 // the connection logic to postgres db and returns the pool of connection
 func connect_to_db() *sql.DB {
 	// num of trials to setup a connection

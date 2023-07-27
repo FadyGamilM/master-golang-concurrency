@@ -9,7 +9,7 @@ $$ language 'plpgsql';
 CREATE TABLE IF NOT EXISTS plans (
     id BIGSERIAL PRIMARY KEY,
     plan_name VARCHAR(200) NOT NULL,
-    plan_amount BIGINT NOT NULL,
+    plan_amount DECIMAL NOT NULL,
     created_at TIMESTAMP DEFAULT now() NOT NULL, 
     updated_at TIMESTAMP DEFAULT now() NOT NULL
 );
@@ -22,14 +22,14 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR NOT NULL,
     is_active BOOLEAN DEFAULT(TRUE),
     is_admin BOOLEAN DEFAULT(FALSE),
-        created_at TIMESTAMP DEFAULT now() NOT NULL, 
+    created_at TIMESTAMP DEFAULT now() NOT NULL, 
     updated_at TIMESTAMP DEFAULT now() NOT NULL
 );
 
 
 CREATE TABLE IF NOT EXISTS users_plans (
     id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL REFERENCES users(id),
+    user_id BIGINT NOT NULL REFERENCES users(id) UNIQUE,
     plan_id BIGINT NOT NULL REFERENCES plans(id),
     created_at TIMESTAMP DEFAULT now() NOT NULL, 
     updated_at TIMESTAMP DEFAULT now() NOT NULL
