@@ -75,24 +75,18 @@ func (app *Config) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// log the user in
 	app.Session.Put(r.Context(), "userID", user.Id)
 	app.Session.Put(r.Context(), "user", user) // in order to register the user data type into the session we have to configure this in the  session intiailizaiton function
+	fmt.Println("SESSION IS => ", app.Session.Get(r.Context(), "user"))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("logged-in successfully !")
 }
 
 func (app *Config) LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	user := User{
-		Id:   1,
-		Name: "fady",
-	}
-	res := AppResponse{
-		Response: &user,
-		Status:   http.StatusOK,
-	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(int(res.Status))
-	json.NewEncoder(w).Encode(res)
+	_ = app.Session.Destroy(r.Context())
+	_ = app.Session.RenewToken(r.Context())
+	fmt.Println("SESSION IS => ", app.Session)
+	w.WriteHeader(http.StatusOK)
 }
 
 func (app *Config) RegisterHandler(w http.ResponseWriter, r *http.Request) {
