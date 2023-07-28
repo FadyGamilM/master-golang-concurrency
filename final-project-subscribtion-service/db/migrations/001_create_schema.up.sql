@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR NOT NULL,
     first_name VARCHAR NOT NULL,
     last_name VARCHAR NOT NULL,
-    password VARCHAR NOT NULL,
+    password VARCHAR(200) NOT NULL,
     is_active BOOLEAN DEFAULT(TRUE),
     is_admin BOOLEAN DEFAULT(FALSE),
     created_at TIMESTAMP DEFAULT now() NOT NULL, 

@@ -20,7 +20,7 @@ import (
 )
 
 const Port = "80"
-const DSN = "host=localhost port=5432 user=concurrency password=concurrency dbname=concurrencyDB sslmode=disable timezone=UTC connect_timeout=5"
+const DSN = "host=localhost port=2345 user=concurrency password=concurrency dbname=concurrencyDB sslmode=disable timezone=UTC connect_timeout=5"
 const REDIS_CS = "127.0.0.1:6379"
 
 func main() {
@@ -82,6 +82,7 @@ func connect_to_db() *sql.DB {
 		conn, err := open_db(dsn)
 		if err != nil {
 			log.Println("postgres instance is not ready yet ...")
+			log.Println(err)
 		} else {
 			log.Println("connected to postgres instance successfully ! ")
 			return conn

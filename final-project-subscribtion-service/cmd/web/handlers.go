@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -25,6 +26,11 @@ func (app *Config) HomeHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(res)
 }
 
+type LoginDTO struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func (app *Config) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// best practice to renew the token which stored in the session each time you login or logout a user
 	err := app.Session.RenewToken(r.Context())
@@ -33,14 +39,17 @@ func (app *Config) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// extract data from the form of the request
-	err = r.ParseForm()
+	var loginData LoginDTO
+	err = json.NewDecoder(r.Body).Decode(&loginData)
 	if err != nil {
 		app.ErrLog.Println("error while parsing the request data : ", err)
-
 	}
 
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
+	email := loginData.Email
+	password := loginData.Password
+
+	fmt.Println("email : ", email)
+	fmt.Println("password : ", password)
 
 	user, err := app.models.UserRepo.GetByEmail(email)
 	if err != nil {
